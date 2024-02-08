@@ -62,11 +62,30 @@ document.addEventListener('DOMContentLoaded', function(){
         const password = passwordInput.value;
         const rememberMe = document.getElementById('remember-me').checked;
 
-        // Log user information (for now, just log to console)
-        console.log("Fullname: ", fullname);
-        console.log("Email: ", email);
-        console.log("Username: ", username);
-        console.log("Password: ", password);
-        console.log("Remember Me: ", rememberMe);
+       //send a POST request to the server with user data
+       fetch('/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            fullname: fullname,
+            email: email,
+            username: username,
+            password: password
+        })
+       })
+       .then(response => {
+          if (response.ok) {
+            console.log('User signed up successfully');
+            //redirect to the home page#
+          }else{
+            console.log('Failed to sign up user');
+          }
+       })
+       .catch(error => {
+          console.error('Error signing up user: ', error.message);
+          //display an error message to the user handling error
+       });
     }
 });
