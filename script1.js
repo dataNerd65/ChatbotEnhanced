@@ -3,29 +3,20 @@ document.addEventListener('DOMContentLoaded', function(){
     const forgotPasswordLink = document.getElementById('forgot-password');
     const signUpLink = document.getElementById('sign-up');
     const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
     const togglePassword = document.querySelector('.toggle-password');
+    const errorMessage = document.getElementById('error-message');
 
     // Event listener for "Forgot Password?" link
     forgotPasswordLink.addEventListener("click", function(event){
         event.preventDefault();
-        alert("This feature is not available yet!");
-        // It should redirect to a new page or show a modal (to be implemented in the future)
+        displayErrorMessage("This feature is not available yet!");
     });
 
     // Event listener for "Sign Up" link
     signUpLink.addEventListener("click", function(event){
         event.preventDefault();
         window.location.href = '/signup.html';
-        const confirmPassword = document.getElementById('confirm-password').value;
-        const password = passwordInput.value;
-
-        if (password !== confirmPassword) {
-            displayErrorMessage("Passwords do not match!");
-            return;
-        } else {
-            console.log("Passwords match!");
-            signUpUser();
-        }
     });
 
     // Event listener for form submission
@@ -35,11 +26,34 @@ document.addEventListener('DOMContentLoaded', function(){
         const password = passwordInput.value;
         const rememberMe = document.getElementById('remember-me').checked;
 
-        // Implementing login functionality (to be sent to server and get response) - backend
-        // For now, just log the input values
-        console.log("Username: ", username);
-        console.log("Password: ", password);
-        console.log("Remember Me: ", rememberMe);
+        //Send a POST request to the server with user credentials
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+
+        .then(response => {
+            if (response.ok){
+                console.log('User logged in successfully!');
+                //Redirect user to homepage
+                window.location.href = '/dashboard.html';
+            } else {
+                console.log('Failed to log in user!');
+                displayErrorMessage("Invalid username or password. Please try again.");
+
+            }
+        })
+        .catch(error => {
+            console.error('Error logging in user: ', error.message);
+            displayErrorMessage("An error occured. Please try again later");
+
+        });
     });
 
     // Event listener for toggling password visibility
@@ -51,43 +65,54 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     function displayErrorMessage(message) {
-        const errorMessage = document.getElementById('error-message');
         errorMessage.textContent = message;
     }
 
     function signUpUser() {
-        // Implement signup functionality (to be sent to server and get response) - backend
         const fullname = document.getElementById('fullname').value;
         const email = document.getElementById('email').value;
         const username = document.getElementById('username').value;
         const password = passwordInput.value;
-        const rememberMe = document.getElementById('remember-me').checked;
+        const confirmPassword = confirmPasswordInput.value;
 
-       //send a POST request to the server with user data
-       fetch('/signup', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            fullname: fullname,
-            email: email,
-            username: username,
-            password: password
+        // Client-side form validation
+        if (!fullname || !email || !username || !password || !confirmPassword) {
+            displayErrorMessage("Please fill in all fields.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            displayErrorMessage("Passwords do not match!");
+            return;
+        }
+
+        // Send a POST request to the server with user data
+        fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                fullname: fullname,
+                email: email,
+                username: username,
+                password: password
+            })
         })
-       })
-       .then(response => {
-          if (response.ok) {
-            console.log('User signed up successfully');
-            window.location.href = '/Login.html';
-            //redirect to the home page#
-          }else{
-            console.log('Failed to sign up user');
-          }
-       })
-       .catch(error => {
-          console.error('Error signing up user: ', error.message);
-          //display an error message to the user handling error
-       });
+        .then(response => {
+            if (response.ok) {
+                console.log('User signed up successfully');
+                window.location.href = '/login.html';
+                // Redirect to the login page
+            } else {
+                console.log('Failed to sign up user');
+                displayErrorMessage("Failed to sign up user. Please try again later.");
+            }
+        })
+        .catch(error => {
+            console.error('Error signing up user: ', error.message);
+            displayErrorMessage("An error occurred. Please try again later.");
+        });
     }
 });
+
