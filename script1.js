@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // Event listener for "Sign Up" link
     signUpLink.addEventListener("click", function(event){
         event.preventDefault();
+        window.location.href = '/signup.html';
         const confirmPassword = document.getElementById('confirm-password').value;
         const password = passwordInput.value;
 
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function(){
        .then(response => {
           if (response.ok) {
             console.log('User signed up successfully');
+            window.location.href = '/Login.html';
             //redirect to the home page#
           }else{
             console.log('Failed to sign up user');
