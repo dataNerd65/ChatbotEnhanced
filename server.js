@@ -6,9 +6,8 @@ const PORT = process.env.PORT || 3001;
 // Serve files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve files from the current directory
-app.use(express.static(__dirname));
 
+//start the server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

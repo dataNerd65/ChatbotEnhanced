@@ -1,3 +1,52 @@
+// Declare signUpUser function first
+function signUpUser() {
+    const fullname = document.getElementById('fullname').value;
+    const email = document.getElementById('email').value;
+    const username = document.getElementById('username').value;
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    // Client-side form validation
+    if (!fullname || !email || !username || !password || !confirmPassword) {
+        displayErrorMessage("Please fill in all fields.");
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        displayErrorMessage("Passwords do not match!");
+        return;
+    }
+
+    // Send a POST request to the server with user data
+    fetch('/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            fullname: fullname,
+            email: email,
+            username: username,
+            password: password
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('User signed up successfully');
+            window.location.href = '/login.html';
+            // Redirect to the login page
+        } else {
+            console.log('Failed to sign up user');
+            displayErrorMessage("Failed to sign up user. Please try again later.");
+        }
+    })
+    .catch(error => {
+        console.error('Error signing up user: ', error.message);
+        displayErrorMessage("An error occurred. Please try again later.");
+    });
+}
+
+// Now declare other variables and set up event listeners
 document.addEventListener('DOMContentLoaded', function(){
     const loginForm = document.getElementById('login-form');
     const forgotPasswordLink = document.getElementById('forgot-password');
@@ -16,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // Event listener for "Sign Up" link
     signUpLink.addEventListener("click", function(event){
         event.preventDefault();
-        window.location.href = '/signup.html';
+        signUpUser(); // Call signUpUser function
     });
 
     // Event listener for form submission
@@ -67,52 +116,4 @@ document.addEventListener('DOMContentLoaded', function(){
     function displayErrorMessage(message) {
         errorMessage.textContent = message;
     }
-
-    function signUpUser() {
-        const fullname = document.getElementById('fullname').value;
-        const email = document.getElementById('email').value;
-        const username = document.getElementById('username').value;
-        const password = passwordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
-
-        // Client-side form validation
-        if (!fullname || !email || !username || !password || !confirmPassword) {
-            displayErrorMessage("Please fill in all fields.");
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            displayErrorMessage("Passwords do not match!");
-            return;
-        }
-
-        // Send a POST request to the server with user data
-        fetch('/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                fullname: fullname,
-                email: email,
-                username: username,
-                password: password
-            })
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('User signed up successfully');
-                window.location.href = '/login.html';
-                // Redirect to the login page
-            } else {
-                console.log('Failed to sign up user');
-                displayErrorMessage("Failed to sign up user. Please try again later.");
-            }
-        })
-        .catch(error => {
-            console.error('Error signing up user: ', error.message);
-            displayErrorMessage("An error occurred. Please try again later.");
-        });
-    }
 });
-
