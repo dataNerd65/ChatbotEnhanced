@@ -45,6 +45,11 @@ function signUpUser() {
     });
 }
 
+//Function to display error message
+function displayErrorMessage(message){
+    alert(message);
+}
+
 // Now declare other variables and set up event listeners
 document.addEventListener('DOMContentLoaded', function(){
     const loginForm = document.getElementById('login-form');
@@ -85,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 password: password
             })
         })
-
         .then(response => {
             if (response.ok){
                 console.log('User logged in successfully!');
@@ -94,13 +98,11 @@ document.addEventListener('DOMContentLoaded', function(){
             } else {
                 console.log('Failed to log in user!');
                 displayErrorMessage("Invalid username or password. Please try again.");
-
             }
         })
         .catch(error => {
             console.error('Error logging in user: ', error.message);
             displayErrorMessage("An error occurred. Please try again later");
-
         });
     });
 
