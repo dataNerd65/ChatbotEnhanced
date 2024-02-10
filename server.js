@@ -3,12 +3,12 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Serve files from the public directory
+// Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-//start the server
+// Listen for requests
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
 

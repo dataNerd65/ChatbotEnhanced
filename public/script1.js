@@ -3,8 +3,8 @@ function signUpUser() {
     const fullname = document.getElementById('fullname').value;
     const email = document.getElementById('email').value;
     const username = document.getElementById('username').value;
-    const password = passwordInput.value;
-    const confirmPassword = confirmPasswordInput.value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
 
     // Client-side form validation
     if (!fullname || !email || !username || !password || !confirmPassword) {
@@ -33,8 +33,7 @@ function signUpUser() {
     .then(response => {
         if (response.ok) {
             console.log('User signed up successfully');
-            window.location.href = '/login.html';
-            // Redirect to the login page
+            window.location.href = '/login.html'; // Redirect to the login page
         } else {
             console.log('Failed to sign up user');
             displayErrorMessage("Failed to sign up user. Please try again later.");
@@ -65,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // Event listener for "Sign Up" link
     signUpLink.addEventListener("click", function(event){
         event.preventDefault();
-        signUpUser(); // Call signUpUser function
+        window.location.href = '/signup.html'; // Redirect to the signup page
     });
 
     // Event listener for form submission
@@ -100,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function(){
         })
         .catch(error => {
             console.error('Error logging in user: ', error.message);
-            displayErrorMessage("An error occured. Please try again later");
+            displayErrorMessage("An error occurred. Please try again later");
 
         });
     });
@@ -117,3 +116,5 @@ document.addEventListener('DOMContentLoaded', function(){
         errorMessage.textContent = message;
     }
 });
+
+
