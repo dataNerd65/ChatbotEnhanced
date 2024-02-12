@@ -33,6 +33,7 @@ function signUpUser() {
     .then(response => {
         if (response.ok) {
             console.log('User signed up successfully');
+            displaySuccessMessage("Signup successful!");
             window.location.href = '/login.html'; // Redirect to the login page
         } else {
             console.log('Failed to sign up user');
@@ -44,11 +45,23 @@ function signUpUser() {
         displayErrorMessage("An error occurred. Please try again later.");
     });
 }
-
-//Function to display error message
-function displayErrorMessage(message){
-    alert(message);
+// Function to display success message
+function displaySuccessMessage(message) {
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = ''; // Clear any existing error messages
+    errorMessage.classList.remove('error'); // Remove error class
+    errorMessage.classList.add('success'); // Add success class
+    errorMessage.textContent = message;
 }
+
+// Function to display error message
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = message;
+    errorMessage.classList.remove('success'); // Remove success class
+    errorMessage.classList.add('error'); // Add error class
+}
+
 
 // Now declare other variables and set up event listeners
 document.addEventListener('DOMContentLoaded', function(){
@@ -56,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function(){
     const forgotPasswordLink = document.getElementById('forgot-password');
     const signUpLink = document.getElementById('sign-up');
     const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirm-password');
     const togglePassword = document.querySelector('.toggle-password');
     const errorMessage = document.getElementById('error-message');
 
@@ -93,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function(){
         .then(response => {
             if (response.ok){
                 console.log('User logged in successfully!');
+                displaySuccessMessage("Login successful! Redirecting to dashboard...");
                 //Redirect user to homepage
                 window.location.href = '/dashboard.html';
             } else {
