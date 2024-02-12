@@ -45,6 +45,7 @@ function signUpUser() {
         displayErrorMessage("An error occurred. Please try again later.");
     });
 }
+
 // Function to display success message
 function displaySuccessMessage(message) {
     const errorMessage = document.getElementById('error-message');
@@ -62,74 +63,23 @@ function displayErrorMessage(message) {
     errorMessage.classList.add('error'); // Add error class
 }
 
-
 // Now declare other variables and set up event listeners
 document.addEventListener('DOMContentLoaded', function(){
-    const loginForm = document.getElementById('login-form');
-    const forgotPasswordLink = document.getElementById('forgot-password');
-    const signUpLink = document.getElementById('sign-up');
-    const passwordInput = document.getElementById('password');
-    const togglePassword = document.querySelector('.toggle-password');
-    const errorMessage = document.getElementById('error-message');
+    const signUpForm = document.getElementById('signup-form');
 
-    // Event listener for "Forgot Password?" link
-    forgotPasswordLink.addEventListener("click", function(event){
-        event.preventDefault();
-        displayErrorMessage("This feature is not available yet!");
-    });
+    if (signUpForm) { // Check if the form element exists
+        // Event listener for form submission
+        signUpForm.addEventListener("submit", function(event){
+            event.preventDefault(); // Prevent form submission
 
-    // Event listener for "Sign Up" link
-    signUpLink.addEventListener("click", function(event){
-        event.preventDefault();
-        window.location.href = '/signup.html'; // Redirect to the signup page
-    });
-
-    // Event listener for form submission
-    loginForm.addEventListener("submit", function(event){
-        event.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = passwordInput.value;
-        const rememberMe = document.getElementById('remember-me').checked;
-
-        //Send a POST request to the server with user credentials
-        fetch('/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        })
-        .then(response => {
-            if (response.ok){
-                console.log('User logged in successfully!');
-                displaySuccessMessage("Login successful! Redirecting to dashboard...");
-                //Redirect user to homepage
-                window.location.href = '/dashboard.html';
-            } else {
-                console.log('Failed to log in user!');
-                displayErrorMessage("Invalid username or password. Please try again.");
-            }
-        })
-        .catch(error => {
-            console.error('Error logging in user: ', error.message);
-            displayErrorMessage("An error occurred. Please try again later");
+            // Call the signUpUser function when the form is submitted
+            signUpUser();
         });
-    });
-
-    // Event listener for toggling password visibility
-    togglePassword.addEventListener("click", function(){
-        const type = passwordInput.getAttribute('type') === "password" ? "text" : "password";
-        passwordInput.setAttribute("type", type);
-        togglePassword.classList.toggle("fa-eye-slash");
-        togglePassword.classList.toggle("fa-eye");
-    });
-
-    function displayErrorMessage(message) {
-        errorMessage.textContent = message;
+    } else {
+        console.error("Element with ID 'signup-form' not found.");
     }
 });
+
+
 
 
